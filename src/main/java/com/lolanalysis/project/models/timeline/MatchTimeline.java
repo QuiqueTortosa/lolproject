@@ -13,7 +13,7 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({ "metadata", "info" })
-public class MatchInfo {
+public class MatchTimeline {
 
     @JsonProperty("metadata")
     private Metadata metadata;

@@ -1,6 +1,8 @@
 package com.lolanalysis.project.controllers;
 
-import com.lolanalysis.project.models.timeline.MatchInfo;
+import com.lolanalysis.project.models.match.Info;
+import com.lolanalysis.project.models.match.MatchDetails;
+import com.lolanalysis.project.models.timeline.MatchTimeline;
 import com.lolanalysis.project.models.User;
 import com.lolanalysis.project.services.RiotService;
 import org.springframework.data.domain.Page;
@@ -31,8 +33,13 @@ public class RiotController {
         return riotService.getMatchesPageable(name, pageable);
     }
 
-    @GetMapping("/matchDetail/{name}")
-    public List<MatchInfo> getMatchTimelines(@PathVariable String name) {
-     return riotService.getMatchDetail(name);
+    @GetMapping("/matchTimelines/{name}")
+    public List<MatchTimeline> getMatchTimelines(@PathVariable String name) {
+     return riotService.getMatchTimeline(name);
+    }
+
+    @GetMapping("/matchDetails/{name}")
+    public List<MatchDetails> getMatcDetails(@PathVariable String name) {
+        return riotService.getMatchDetail(name);
     }
 }

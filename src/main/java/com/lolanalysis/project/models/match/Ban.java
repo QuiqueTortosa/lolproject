@@ -12,15 +12,11 @@ import java.util.List;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Team {
+public class Ban {
 
-    @JsonProperty("bans")
-    private List<Ban> bans;
-    @JsonProperty("objectives")
-    private Objectives objectives;
-    @JsonProperty("teamId")
-    private int teamId;
-    @JsonProperty("win")
-    private boolean win;
+    @JsonProperty("championId")
+    private int championId;
+    @JsonProperty("pickTurn")
+    private int pickTurn;
 
 }

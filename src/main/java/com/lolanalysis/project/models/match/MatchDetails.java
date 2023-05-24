@@ -2,25 +2,20 @@ package com.lolanalysis.project.models.match;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lolanalysis.project.models.Metadata;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @AllArgsConstructor
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Team {
+public class MatchDetails {
 
-    @JsonProperty("bans")
-    private List<Ban> bans;
-    @JsonProperty("objectives")
-    private Objectives objectives;
-    @JsonProperty("teamId")
-    private int teamId;
-    @JsonProperty("win")
-    private boolean win;
+    @JsonProperty("metadata")
+    private Metadata metadata;
+    @JsonProperty("info")
+    private Info info;
 
 }

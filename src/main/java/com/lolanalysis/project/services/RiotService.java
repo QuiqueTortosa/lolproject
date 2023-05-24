@@ -2,7 +2,9 @@ package com.lolanalysis.project.services;
 
 import com.lolanalysis.project.clients.RiotApiMatch;
 import com.lolanalysis.project.clients.RiotApiUser;
-import com.lolanalysis.project.models.timeline.MatchInfo;
+import com.lolanalysis.project.models.match.Info;
+import com.lolanalysis.project.models.match.MatchDetails;
+import com.lolanalysis.project.models.timeline.MatchTimeline;
 import com.lolanalysis.project.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,13 +43,21 @@ public class RiotService {
         return new PageImpl<>(matches.subList(start, end), pageable, matches.size());
     }
 
-    public List<MatchInfo> getMatchDetail(String name){
+    public List<MatchTimeline> getMatchTimeline(String name){
         List<String> matches = getMatches(name,10);
-        List<MatchInfo> matchInfos = new ArrayList<>();
+        List<MatchTimeline> matchInfos = new ArrayList<>();
         for(String match: matches) {
             matchInfos.add(riotApiMatch.getMatchTimeline(match,apiKey));
         }
-        System.out.println(matchInfos.get(0).toString());
+        return matchInfos;
+    }
+
+    public List<MatchDetails> getMatchDetail(String name){
+        List<String> matches = getMatches(name,10);
+        List<MatchDetails> matchInfos = new ArrayList<>();
+        for(String match: matches) {
+            matchInfos.add(riotApiMatch.getMatchDetails(match,apiKey));
+        }
         return matchInfos;
     }
 }
