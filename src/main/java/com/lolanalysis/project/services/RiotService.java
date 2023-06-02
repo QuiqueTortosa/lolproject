@@ -2,7 +2,6 @@ package com.lolanalysis.project.services;
 
 import com.lolanalysis.project.clients.RiotApiMatch;
 import com.lolanalysis.project.clients.RiotApiUser;
-import com.lolanalysis.project.models.match.Info;
 import com.lolanalysis.project.models.match.MatchDetails;
 import com.lolanalysis.project.models.timeline.MatchTimeline;
 import com.lolanalysis.project.models.User;
