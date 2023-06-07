@@ -2,9 +2,11 @@ package com.lolanalysis.project.services;
 
 import com.lolanalysis.project.clients.RiotApiMatch;
 import com.lolanalysis.project.clients.RiotApiUser;
+import com.lolanalysis.project.models.dtos.MatchDetailsAverageDto;
 import com.lolanalysis.project.models.match.MatchDetails;
 import com.lolanalysis.project.models.timeline.MatchTimeline;
 import com.lolanalysis.project.models.User;
+import com.lolanalysis.project.utils.MatchDetailAverageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -58,5 +60,15 @@ public class RiotService {
             matchInfos.add(riotApiMatch.getMatchDetails(match,apiKey));
         }
         return matchInfos;
+    }
+
+    public MatchDetailsAverageDto getMatchDetailSummary(String name){
+        List<String> matches = getMatches(name,10);
+        List<MatchDetails> matchInfos = new ArrayList<>();
+        for(String match: matches) {
+            matchInfos.add(riotApiMatch.getMatchDetails(match,apiKey));
+        }
+        MatchDetailsAverageDto matchDetailsAverageDto = MatchDetailAverageMapper.toMatchDetailsAverageDto(matchInfos);
+        return matchDetailsAverageDto;
     }
 }

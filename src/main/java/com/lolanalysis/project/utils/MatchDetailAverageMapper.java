@@ -5,14 +5,16 @@ import com.lolanalysis.project.models.dtos.MatchDetailsAverageDto;
 import com.lolanalysis.project.models.match.MatchDetails;
 import com.lolanalysis.project.models.match.Participant;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MatchDetailAverageMapper {
 
-    public MatchDetailsAverageDto toMatchDetailsAverageDto (List<MatchDetails> matchs){
+    public static MatchDetailsAverageDto toMatchDetailsAverageDto (List<MatchDetails> matchs){
         MatchDetailsAverageDto matchDetailsAverageDto = new MatchDetailsAverageDto();
         int surrenderCount = 0, firstBloodOrAssistCount=0, firstTowerOrAssistCount=0, winCount=0;
         int suppCount=0,adcCount=0,junglCount=0,midCount=0,topCount=0;
+        matchDetailsAverageDto.setChampTimes(new HashMap<>());
         for(MatchDetails match: matchs){
             Participant participant = match.getInfo().getParticipants().get(0);
             if(participant.isGameEndedInSurrender()) surrenderCount++;
@@ -84,7 +86,11 @@ public class MatchDetailAverageMapper {
             matchDetailsAverageDto.setTotalTimeSpentDead(matchDetailsAverageDto.getTotalTimeSpentDead()+(participant.getTotalTimeSpentDead()/matchs.size()));
             matchDetailsAverageDto.setTotalUnitsHealed(matchDetailsAverageDto.getTotalUnitsHealed()+(participant.getTotalUnitsHealed()/matchs.size()));
             ChampDto champdto = new ChampDto(participant.getChampionName(),participant.getIndividualPosition());
-            matchDetailsAverageDto.getChampTimes().put(champdto,matchDetailsAverageDto.getChampTimes().get(champdto)+1);
+            if(matchDetailsAverageDto.getChampTimes().get(champdto) == null){
+                matchDetailsAverageDto.getChampTimes().put(champdto,1);
+            } else {
+                matchDetailsAverageDto.getChampTimes().put(champdto,matchDetailsAverageDto.getChampTimes().get(champdto)+1);
+            }
         }
         matchDetailsAverageDto.setGameEndedInSurrender(surrenderCount/matchs.size());
         matchDetailsAverageDto.setFirstBloodOrAssist(firstBloodOrAssistCount/matchs.size());
