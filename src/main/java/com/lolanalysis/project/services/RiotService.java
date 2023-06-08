@@ -4,6 +4,7 @@ import com.lolanalysis.project.clients.RiotApiMatch;
 import com.lolanalysis.project.clients.RiotApiUser;
 import com.lolanalysis.project.models.dtos.MatchDetailsAverageDto;
 import com.lolanalysis.project.models.match.MatchDetails;
+import com.lolanalysis.project.models.match.Participant;
 import com.lolanalysis.project.models.timeline.MatchTimeline;
 import com.lolanalysis.project.models.User;
 import com.lolanalysis.project.utils.MatchDetailAverageMapper;
@@ -57,18 +58,24 @@ public class RiotService {
         List<String> matches = getMatches(name,10);
         List<MatchDetails> matchInfos = new ArrayList<>();
         for(String match: matches) {
-            matchInfos.add(riotApiMatch.getMatchDetails(match,apiKey));
+            //Testing
+            MatchDetails matchDetails = riotApiMatch.getMatchDetails(match,apiKey);
+            List<Participant> temp = matchDetails.getInfo().getParticipants().stream()
+                                    .filter(p -> p.getSummonerName().equals(name))
+                                    .findFirst().stream().toList();
+            matchDetails.getInfo().setParticipants(temp);
+            matchInfos.add(matchDetails);
         }
         return matchInfos;
     }
 
     public MatchDetailsAverageDto getMatchDetailSummary(String name){
-        List<String> matches = getMatches(name,10);
+        List<String> matches = getMatches(name,40);
         List<MatchDetails> matchInfos = new ArrayList<>();
         for(String match: matches) {
             matchInfos.add(riotApiMatch.getMatchDetails(match,apiKey));
         }
-        MatchDetailsAverageDto matchDetailsAverageDto = MatchDetailAverageMapper.toMatchDetailsAverageDto(matchInfos);
+        MatchDetailsAverageDto matchDetailsAverageDto = MatchDetailAverageMapper.toMatchDetailsAverageDto(matchInfos, name);
         return matchDetailsAverageDto;
     }
 }

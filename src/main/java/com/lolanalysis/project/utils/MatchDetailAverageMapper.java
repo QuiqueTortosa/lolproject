@@ -10,13 +10,16 @@ import java.util.List;
 
 public class MatchDetailAverageMapper {
 
-    public static MatchDetailsAverageDto toMatchDetailsAverageDto (List<MatchDetails> matchs){
+    public static MatchDetailsAverageDto toMatchDetailsAverageDto (List<MatchDetails> matchs, String name){
         MatchDetailsAverageDto matchDetailsAverageDto = new MatchDetailsAverageDto();
         int surrenderCount = 0, firstBloodOrAssistCount=0, firstTowerOrAssistCount=0, winCount=0;
         int suppCount=0,adcCount=0,junglCount=0,midCount=0,topCount=0;
         matchDetailsAverageDto.setChampTimes(new HashMap<>());
         for(MatchDetails match: matchs){
-            Participant participant = match.getInfo().getParticipants().get(0);
+            Participant participant = match.getInfo().getParticipants().stream()
+                    .filter(p -> p.getSummonerName().equals(name))
+                    .findFirst()
+                    .get(); //habria que lanzar un error si no encuentra ninguno
             if(participant.isGameEndedInSurrender()) surrenderCount++;
             if(participant.isFirstBloodAssist() || participant.isFirstBloodKill()) firstBloodOrAssistCount++;
             if(participant.isFirstTowerAssist() || participant.isFirstTowerKill()) firstTowerOrAssistCount++;
@@ -34,7 +37,7 @@ public class MatchDetailAverageMapper {
                                                 +participant.getDangerPings()+participant.getEnemyMissingPings()+participant.getEnemyVisionPings()
                                                 +participant.getGetBackPings()+participant.getHoldPings()+participant.getNeedVisionPings()
                                                 +participant.getOnMyWayPings()+participant.getPushPings()+participant.getVisionClearedPings())/matchs.size()));
-            matchDetailsAverageDto.setTurretKills(matchDetailsAverageDto.getKills()+(participant.getTurretKills()/matchs.size()));
+            matchDetailsAverageDto.setTurretKills(matchDetailsAverageDto.getTurretKills()+((double)participant.getTurretKills()/matchs.size()));
             matchDetailsAverageDto.setDamageDealtToTurrets(matchDetailsAverageDto.getDamageDealtToTurrets()+(participant.getDamageDealtToTurrets()/matchs.size()));
             matchDetailsAverageDto.setTurretPlatesTaken(matchDetailsAverageDto.getTurretPlatesTaken()+(participant.getChallenges().getTurretPlatesTaken()/matchs.size()));
             matchDetailsAverageDto.setNeutralMinionsKilled(matchDetailsAverageDto.getNeutralMinionsKilled()+(participant.getNeutralMinionsKilled()/matchs.size()));
@@ -93,8 +96,8 @@ public class MatchDetailAverageMapper {
             }
         }
         matchDetailsAverageDto.setGameEndedInSurrender(surrenderCount/matchs.size());
-        matchDetailsAverageDto.setFirstBloodOrAssist(firstBloodOrAssistCount/matchs.size());
-        matchDetailsAverageDto.setFirstTowerOrAssist(firstTowerOrAssistCount/matchs.size());
+        matchDetailsAverageDto.setFirstBloodOrAssist((double) firstBloodOrAssistCount/matchs.size());
+        matchDetailsAverageDto.setFirstTowerOrAssist((double) firstTowerOrAssistCount/matchs.size());
         matchDetailsAverageDto.setWin(winCount/matchs.size());
         matchDetailsAverageDto.setAdcRole(adcCount/matchs.size());
         matchDetailsAverageDto.setMidRole(midCount/matchs.size());
