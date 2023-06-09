@@ -72,10 +72,8 @@ public class MatchDetailsAverageDto {
     private double totalTimeSpentDead;
     private double totalUnitsHealed;
     private double win;
-    private double summonerName;
-    private double profileIcon;
-    private double championId;
-    private double championName;
+    private String summonerName;
+    private String profileIcon;
     private double lane;
     private double role;
     private Map<ChampDto,Integer> champTimes;

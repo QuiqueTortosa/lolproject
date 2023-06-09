@@ -1,7 +1,7 @@
 package com.lolanalysis.project.services;
 
-import com.lolanalysis.project.clients.RiotApiMatch;
-import com.lolanalysis.project.clients.RiotApiUser;
+import com.lolanalysis.project.clients.RiotApiMatchClient;
+import com.lolanalysis.project.clients.RiotApiUserClient;
 import com.lolanalysis.project.models.dtos.MatchDetailsAverageDto;
 import com.lolanalysis.project.models.match.MatchDetails;
 import com.lolanalysis.project.models.match.Participant;
@@ -22,19 +22,25 @@ public class RiotService {
 
     @Value("${riot.api.key}")
     private String apiKey;
-    @Autowired
-    private RiotApiUser riotApiUser;
+
+    private final RiotApiUserClient riotApiUserClient;
+    private final RiotApiMatchClient riotApiMatch;
+    private final ChatGptService chatGptService;
 
     @Autowired
-    private RiotApiMatch riotApiMatch;
+    public RiotService(RiotApiUserClient riotApiUserClient, RiotApiMatchClient riotApiMatch, ChatGptService chatGptService){
+        this.riotApiUserClient = riotApiUserClient;
+        this.riotApiMatch = riotApiMatch;
+        this.chatGptService = chatGptService;
+    }
 
     public User getUser(String name) {
-        User user = riotApiUser.getUser(name,apiKey);
+        User user = riotApiUserClient.getUser(name,apiKey);
         return user;
     }
 
     public List<String> getMatches(String name, int count) {
-        String puuid = riotApiUser.getUser(name, apiKey).getPuuid();
+        String puuid = riotApiUserClient.getUser(name, apiKey).getPuuid();
         return riotApiMatch.getMatchs(puuid, count,apiKey);
     }
 
@@ -70,12 +76,14 @@ public class RiotService {
     }
 
     public MatchDetailsAverageDto getMatchDetailSummary(String name){
-        List<String> matches = getMatches(name,40);
+        List<String> matches = getMatches(name,10);
         List<MatchDetails> matchInfos = new ArrayList<>();
         for(String match: matches) {
             matchInfos.add(riotApiMatch.getMatchDetails(match,apiKey));
         }
         MatchDetailsAverageDto matchDetailsAverageDto = MatchDetailAverageMapper.toMatchDetailsAverageDto(matchInfos, name);
+        //toString
+        //llamar chatgpt
         return matchDetailsAverageDto;
     }
 }

@@ -1,0 +1,23 @@
+package com.lolanalysis.project.models.chatGpt;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ChatGptRequest {
+
+    @JsonProperty("prompt")
+    private String prompt;
+
+    @JsonProperty("max_tokens")
+    private int maxTokens;
+
+}
