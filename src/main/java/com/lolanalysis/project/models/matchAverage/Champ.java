@@ -1,4 +1,4 @@
-package com.lolanalysis.project.models.dtos;
+package com.lolanalysis.project.models.matchAverage;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChampDto {
+public class Champ {
 
     private String champ;
     private String rol;
@@ -20,7 +20,7 @@ public class ChampDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ChampDto champDto = (ChampDto) o;
+        Champ champDto = (Champ) o;
         return Objects.equals(champ, champDto.champ) && Objects.equals(rol, champDto.rol);
     }
 

@@ -4,10 +4,14 @@ import com.lolanalysis.project.clients.ChatGptClient;
 import com.lolanalysis.project.models.chatGpt.ChatGptRequest;
 import com.lolanalysis.project.models.chatGpt.ChatGptResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ChatGptService {
+
+    @Value("${chatgpt.api.key}")
+    private String apiKey;
 
     private final ChatGptClient chatGptClient;
 
@@ -16,12 +20,13 @@ public class ChatGptService {
         this.chatGptClient = chatGptClient;
     }
 
-    public ChatGptResponse getChatCompletion(String prompt) {
+    public ChatGptResponse getCompletion(String prompt) {
         ChatGptRequest request = new ChatGptRequest();
+        request.setModel("text-ada-001");
         request.setPrompt(prompt);
-        request.setMaxTokens(100); // Configura la cantidad de tokens máximos que deseas recibir en la respuesta
+        request.setMaxTokens(1000); // Configura la cantidad de tokens máximos que deseas recibir en la respuesta
 
-        return chatGptClient.getChatCompletion(request);
+        return chatGptClient.getCompletion(request,apiKey);
     }
 
 }

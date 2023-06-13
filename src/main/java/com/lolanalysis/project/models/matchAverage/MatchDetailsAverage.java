@@ -1,18 +1,17 @@
-package com.lolanalysis.project.models.dtos;
+package com.lolanalysis.project.models.matchAverage;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MatchDetailsAverageDto {
+public class MatchDetailsAverage {
 
     private double gameDuration;
     private double timePlayed;
@@ -74,7 +73,7 @@ public class MatchDetailsAverageDto {
     private double win;
     private String summonerName;
     private String profileIcon;
-    private Map<ChampDto,Integer> champTimes;
+    private Map<Champ,Integer> champTimes;
     private double supportRole;
     private double adcRole;
     private double jungleRole;

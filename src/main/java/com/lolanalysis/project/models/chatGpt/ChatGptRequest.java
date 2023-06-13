@@ -11,13 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChatGptRequest {
 
-    @JsonProperty("prompt")
+    private String model;
     private String prompt;
-
-    @JsonProperty("max_tokens")
     private int maxTokens;
 
 }
