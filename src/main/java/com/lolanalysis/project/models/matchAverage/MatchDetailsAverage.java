@@ -14,8 +14,8 @@ import java.util.Map;
 @NoArgsConstructor
 public class MatchDetailsAverageDto {
 
-    private long gameDuration;
-    private long timePlayed;
+    private double gameDuration;
+    private double timePlayed;
     private double gameEndedInSurrender;
     private double pings;
     private double firstBloodOrAssist;
@@ -74,8 +74,6 @@ public class MatchDetailsAverageDto {
     private double win;
     private String summonerName;
     private String profileIcon;
-    private double lane;
-    private double role;
     private Map<ChampDto,Integer> champTimes;
     private double supportRole;
     private double adcRole;
