@@ -1,116 +1,112 @@
 package com.lolanalysis.project.utils;
 
 import com.lolanalysis.project.models.matchAverage.Champ;
-import com.lolanalysis.project.models.matchAverage.MatchDetailsAv;
 import com.lolanalysis.project.models.matchAverage.MatchDetailsAverage;
+import com.lolanalysis.project.models.matchAverage.RolDetailsAverage;
 import com.lolanalysis.project.models.match.MatchDetails;
 import com.lolanalysis.project.models.match.Participant;
-
-import java.util.HashMap;
 import java.util.List;
 
 public class MatchDetailAverageMapper {
 
-    public static MatchDetailsAv tomatchDetailsAverage (List<MatchDetails> matchs, String name){
-        MatchDetailsAv matchDetailsAv = new MatchDetailsAv();
-        //matchDetailsAverage.setChampTimes(new HashMap<>());
+    public static MatchDetailsAverage tomatchDetailsAverage (List<MatchDetails> matchs, String name){
+        MatchDetailsAverage matchDetailsAverage = new MatchDetailsAverage();
         for(MatchDetails match: matchs){
             Participant participant = match.getInfo().getParticipants().stream()
                     .filter(p -> p.getSummonerName().equals(name))
                     .findFirst()
                     .get(); //habria que lanzar un error si no encuentra ninguno
-            if(participant.getIndividualPosition().equals("adc")) {
-                matchDetailsAv.setAdCarry(setFields(matchDetailsAv.getAdCarry(), match,participant));
-            }else if(participant.getIndividualPosition().equals("mid")){
-                matchDetailsAv.setMid(setFields(matchDetailsAv.getMid(), match,participant));
-            }else if(participant.getIndividualPosition().equals("jungl")){
-                matchDetailsAv.setJungle(setFields(matchDetailsAv.getJungle(), match,participant));
-            }else if(participant.getIndividualPosition().equals("top")){
-                matchDetailsAv.setTop(setFields(matchDetailsAv.getTop(), match,participant));
+            if(participant.getIndividualPosition().equals("BOTTOM")) {
+                matchDetailsAverage.setAdCarry(setFields(matchDetailsAverage.getAdCarry(), match,participant));
+            }else if(participant.getIndividualPosition().equals("MIDDLE")){
+                matchDetailsAverage.setMid(setFields(matchDetailsAverage.getMid(), match,participant));
+            }else if(participant.getIndividualPosition().equals("JUNGLE")){
+                matchDetailsAverage.setJungle(setFields(matchDetailsAverage.getJungle(), match,participant));
+            }else if(participant.getIndividualPosition().equals("TOP")){
+                matchDetailsAverage.setTop(setFields(matchDetailsAverage.getTop(), match,participant));
             }else {
-                matchDetailsAv.setSupport(setFields(matchDetailsAv.getSupport(), match,participant));
+                matchDetailsAverage.setSupport(setFields(matchDetailsAverage.getSupport(), match,participant));
             }
         }
-        return matchDetailsAv;
+        return matchDetailsAverage;
         //return format(matchDetailsAverage);
     }
 
-    private static MatchDetailsAverage setFields(MatchDetailsAverage matchDetailsAverage, MatchDetails match, Participant participant){
-        int surrenderCount = 0, firstBloodOrAssistCount=0, firstTowerOrAssistCount=0, winCount=0;
-        //int suppCount=0,adcCount=0,junglCount=0,midCount=0,topCount=0;
-        if(participant.isGameEndedInSurrender()) surrenderCount++;
-        if(participant.isFirstBloodAssist() || participant.isFirstBloodKill()) firstBloodOrAssistCount++;
-        if(participant.isFirstTowerAssist() || participant.isFirstTowerKill()) firstTowerOrAssistCount++;
-        if(participant.isWin()) winCount++;
-        matchDetailsAverage.setDeaths(matchDetailsAverage.getDeaths()+participant.getDeaths());
-        matchDetailsAverage.setGameDuration(matchDetailsAverage.getGameDuration()+match.getInfo().getGameDuration());
-        matchDetailsAverage.setTimePlayed(matchDetailsAverage.getTimePlayed()+participant.getTimePlayed());
-        matchDetailsAverage.setPings(matchDetailsAverage.getPings()+(participant.getAllInPings()+participant.getAssistMePings()
+    private static RolDetailsAverage setFields(RolDetailsAverage rolDetailsAverage, MatchDetails match, Participant participant){
+        if(participant.isGameEndedInSurrender()) rolDetailsAverage.setSurrenderCount(rolDetailsAverage.getSurrenderCount()+1);
+        if(participant.isFirstBloodAssist() || participant.isFirstBloodKill()) rolDetailsAverage.setFirstBloodOrAssistCount(rolDetailsAverage.getFirstBloodOrAssistCount()+1);
+        if(participant.isFirstTowerAssist() || participant.isFirstTowerKill()) rolDetailsAverage.setFirstTowerOrAssistCount(rolDetailsAverage.getFirstTowerOrAssistCount()+1);
+        if(participant.isWin()) rolDetailsAverage.setWinCount(rolDetailsAverage.getWinCount()+1);
+        rolDetailsAverage.setDeaths(rolDetailsAverage.getDeaths()+participant.getDeaths());
+        rolDetailsAverage.setGameDuration(rolDetailsAverage.getGameDuration()+match.getInfo().getGameDuration());
+        rolDetailsAverage.setTimePlayed(rolDetailsAverage.getTimePlayed()+participant.getTimePlayed());
+        rolDetailsAverage.setPings(rolDetailsAverage.getPings()+(participant.getAllInPings()+participant.getAssistMePings()
                 +participant.getBaitPings()+participant.getBasicPings()+ participant.getCommandPings()
                 +participant.getDangerPings()+participant.getEnemyMissingPings()+participant.getEnemyVisionPings()
                 +participant.getGetBackPings()+participant.getHoldPings()+participant.getNeedVisionPings()
                 +participant.getOnMyWayPings()+participant.getPushPings()+participant.getVisionClearedPings()));
-        matchDetailsAverage.setTurretKills(matchDetailsAverage.getTurretKills()+participant.getTurretKills());
-        matchDetailsAverage.setDamageDealtToTurrets(matchDetailsAverage.getDamageDealtToTurrets()+participant.getDamageDealtToTurrets());
-        matchDetailsAverage.setTurretPlatesTaken(matchDetailsAverage.getTurretPlatesTaken()+participant.getChallenges().getTurretPlatesTaken());
-        matchDetailsAverage.setNeutralMinionsKilled(matchDetailsAverage.getNeutralMinionsKilled()+participant.getNeutralMinionsKilled());
-        matchDetailsAverage.setJunglMinionsKill(matchDetailsAverage.getJunglMinionsKill()+(participant.getTotalAllyJungleMinionsKilled()+participant.getTotalEnemyJungleMinionsKilled()));
-        matchDetailsAverage.setTotalMinionsKilled(matchDetailsAverage.getTotalMinionsKilled()+participant.getTotalMinionsKilled());
-        matchDetailsAverage.setNeutralMinionsKilled(matchDetailsAverage.getNeutralMinionsKilled()+participant.getNeutralMinionsKilled());
-        matchDetailsAverage.setMoreEnemyJungleThanOpponent(matchDetailsAverage.getMoreEnemyJungleThanOpponent()+ participant.getChallenges().getMoreEnemyJungleThanOpponent());
-        matchDetailsAverage.setQuickFirstTurret(matchDetailsAverage.getQuickFirstTurret()+ participant.getChallenges().getQuickFirstTurret());
-        matchDetailsAverage.setQuickSoloKills(matchDetailsAverage.getQuickSoloKills()+ participant.getChallenges().getQuickSoloKills());
-        matchDetailsAverage.setBaronKills(matchDetailsAverage.getBaronKills()+participant.getChallenges().getTeamBaronKills());
-        matchDetailsAverage.setDragonKills(matchDetailsAverage.getDragonKills()+participant.getDragonKills());
-        matchDetailsAverage.setTeamElderDragonKills(matchDetailsAverage.getTeamElderDragonKills()+participant.getChallenges().getTeamElderDragonKills());
-        matchDetailsAverage.setTeamRiftHeraldKills(matchDetailsAverage.getTeamRiftHeraldKills()+participant.getChallenges().getTeamRiftHeraldKills());
-        matchDetailsAverage.setVisionScorePerMinute(matchDetailsAverage.getVisionScorePerMinute()+participant.getChallenges().getVisionScorePerMinute());
-        matchDetailsAverage.setDetectorWardsPlaced(matchDetailsAverage.getDetectorWardsPlaced()+participant.getDetectorWardsPlaced());
-        matchDetailsAverage.setStealthWardsPlaced(matchDetailsAverage.getStealthWardsPlaced()+participant.getChallenges().getStealthWardsPlaced());
-        matchDetailsAverage.setWardsPlaced(matchDetailsAverage.getWardsPlaced()+participant.getWardsPlaced());
-        matchDetailsAverage.setVisionScore(matchDetailsAverage.getVisionScore()+ participant.getVisionScore());
-        matchDetailsAverage.setVisionWardsBoughtInGame(matchDetailsAverage.getVisionWardsBoughtInGame()+ participant.getVisionWardsBoughtInGame());
-        matchDetailsAverage.setWardsKilled(matchDetailsAverage.getWardsKilled()+participant.getWardsKilled());
-        matchDetailsAverage.setEarlyLaningPhaseGoldExpAdvantage(matchDetailsAverage.getEarlyLaningPhaseGoldExpAdvantage()+participant.getChallenges().getEarlyLaningPhaseGoldExpAdvantage());
-        matchDetailsAverage.setEffectiveHealAndShielding(matchDetailsAverage.getEffectiveHealAndShielding()+participant.getChallenges().getEffectiveHealAndShielding());
-        matchDetailsAverage.setGoldPerMinute(matchDetailsAverage.getGoldPerMinute()+participant.getChallenges().getGoldPerMinute());
-        matchDetailsAverage.setJungleCsBefore10Minutes(matchDetailsAverage.getJungleCsBefore10Minutes()+participant.getChallenges().getJungleCsBefore10Minutes());
-        matchDetailsAverage.setLaneMinionsFirst10Minutes(matchDetailsAverage.getLaneMinionsFirst10Minutes()+participant.getChallenges().getLaneMinionsFirst10Minutes());
-        matchDetailsAverage.setLaningPhaseGoldExpAdvantage(matchDetailsAverage.getLaningPhaseGoldExpAdvantage()+participant.getChallenges().getLaningPhaseGoldExpAdvantage());
-        matchDetailsAverage.setMaxCsAdvantageOnLaneOpponent(matchDetailsAverage.getMaxCsAdvantageOnLaneOpponent()+participant.getChallenges().getMaxCsAdvantageOnLaneOpponent());
-        matchDetailsAverage.setVisionScoreAdvantageLaneOpponent(matchDetailsAverage.getVisionScoreAdvantageLaneOpponent()+participant.getChallenges().getVisionScoreAdvantageLaneOpponent());
-        matchDetailsAverage.setMaxLevelLeadLaneOpponent(matchDetailsAverage.getMaxLevelLeadLaneOpponent()+participant.getChallenges().getMaxLevelLeadLaneOpponent());
-        matchDetailsAverage.setSaveAllyFromDeath(matchDetailsAverage.getSaveAllyFromDeath()+participant.getChallenges().getSaveAllyFromDeath());
-        matchDetailsAverage.setKills(matchDetailsAverage.getKills()+participant.getKills());
-        matchDetailsAverage.setKda(matchDetailsAverage.getKda()+participant.getChallenges().getKda());
-        matchDetailsAverage.setKillParticipation(matchDetailsAverage.getKillParticipation()+participant.getChallenges().getKillParticipation());
-        matchDetailsAverage.setDamageDealtToObjectives(matchDetailsAverage.getDamageDealtToObjectives()+participant.getDamageDealtToObjectives());
-        matchDetailsAverage.setGoldEarned(matchDetailsAverage.getGoldEarned()+participant.getGoldEarned());
-        matchDetailsAverage.setLongestTimeSpentLiving(matchDetailsAverage.getLongestTimeSpentLiving()+participant.getLongestTimeSpentLiving());
-        matchDetailsAverage.setMagicDamageDealtToChampions(matchDetailsAverage.getMagicDamageDealtToChampions()+participant.getMagicDamageDealtToChampions());
-        matchDetailsAverage.setMagicDamageTaken(matchDetailsAverage.getMagicDamageTaken()+participant.getMagicDamageTaken());
-        matchDetailsAverage.setPhysicalDamageTaken(matchDetailsAverage.getPhysicalDamageTaken()+participant.getPhysicalDamageTaken());
-        matchDetailsAverage.setPhysicalDamageDealtToChampions(matchDetailsAverage.getPhysicalDamageDealtToChampions()+participant.getPhysicalDamageDealtToChampions());
-        matchDetailsAverage.setDamagePerMinute(matchDetailsAverage.getDamagePerMinute()+participant.getChallenges().getDamagePerMinute());
-        matchDetailsAverage.setDamageTakenOnTeamPercentage(matchDetailsAverage.getDamageTakenOnTeamPercentage()+participant.getChallenges().getDamageTakenOnTeamPercentage());
-        matchDetailsAverage.setTeamDamagePercentage(matchDetailsAverage.getTeamDamagePercentage()+participant.getChallenges().getTeamDamagePercentage());
-        matchDetailsAverage.setTotalDamageDealtToChampions(matchDetailsAverage.getTotalDamageDealtToChampions()+participant.getTotalDamageDealtToChampions());
-        matchDetailsAverage.setTotalDamageShieldedOnTeammates(matchDetailsAverage.getTotalDamageShieldedOnTeammates()+participant.getTotalDamageShieldedOnTeammates());
-        matchDetailsAverage.setTotalDamageTaken(matchDetailsAverage.getTotalDamageTaken()+participant.getTotalDamageTaken());
-        matchDetailsAverage.setTotalHeal(matchDetailsAverage.getTotalHeal()+participant.getTotalHeal());
-        matchDetailsAverage.setTotalHealsOnTeammates(matchDetailsAverage.getTotalHealsOnTeammates()+participant.getTotalHealsOnTeammates());
-        matchDetailsAverage.setTotalTimeSpentDead(matchDetailsAverage.getTotalTimeSpentDead()+participant.getTotalTimeSpentDead());
-        matchDetailsAverage.setTotalUnitsHealed(matchDetailsAverage.getTotalUnitsHealed()+participant.getTotalUnitsHealed());
+        rolDetailsAverage.setTurretKills(rolDetailsAverage.getTurretKills()+participant.getTurretKills());
+        rolDetailsAverage.setDamageDealtToTurrets(rolDetailsAverage.getDamageDealtToTurrets()+participant.getDamageDealtToTurrets());
+        rolDetailsAverage.setTurretPlatesTaken(rolDetailsAverage.getTurretPlatesTaken()+participant.getChallenges().getTurretPlatesTaken());
+        rolDetailsAverage.setNeutralMinionsKilled(rolDetailsAverage.getNeutralMinionsKilled()+participant.getNeutralMinionsKilled());
+        rolDetailsAverage.setJunglMinionsKill(rolDetailsAverage.getJunglMinionsKill()+(participant.getTotalAllyJungleMinionsKilled()+participant.getTotalEnemyJungleMinionsKilled()));
+        rolDetailsAverage.setTotalMinionsKilled(rolDetailsAverage.getTotalMinionsKilled()+participant.getTotalMinionsKilled());
+        rolDetailsAverage.setNeutralMinionsKilled(rolDetailsAverage.getNeutralMinionsKilled()+participant.getNeutralMinionsKilled());
+        rolDetailsAverage.setMoreEnemyJungleThanOpponent(rolDetailsAverage.getMoreEnemyJungleThanOpponent()+ participant.getChallenges().getMoreEnemyJungleThanOpponent());
+        rolDetailsAverage.setQuickFirstTurret(rolDetailsAverage.getQuickFirstTurret()+ participant.getChallenges().getQuickFirstTurret());
+        rolDetailsAverage.setQuickSoloKills(rolDetailsAverage.getQuickSoloKills()+ participant.getChallenges().getQuickSoloKills());
+        rolDetailsAverage.setBaronKills(rolDetailsAverage.getBaronKills()+participant.getChallenges().getTeamBaronKills());
+        rolDetailsAverage.setDragonKills(rolDetailsAverage.getDragonKills()+participant.getDragonKills());
+        rolDetailsAverage.setTeamElderDragonKills(rolDetailsAverage.getTeamElderDragonKills()+participant.getChallenges().getTeamElderDragonKills());
+        rolDetailsAverage.setTeamRiftHeraldKills(rolDetailsAverage.getTeamRiftHeraldKills()+participant.getChallenges().getTeamRiftHeraldKills());
+        rolDetailsAverage.setVisionScorePerMinute(rolDetailsAverage.getVisionScorePerMinute()+participant.getChallenges().getVisionScorePerMinute());
+        rolDetailsAverage.setDetectorWardsPlaced(rolDetailsAverage.getDetectorWardsPlaced()+participant.getDetectorWardsPlaced());
+        rolDetailsAverage.setStealthWardsPlaced(rolDetailsAverage.getStealthWardsPlaced()+participant.getChallenges().getStealthWardsPlaced());
+        rolDetailsAverage.setWardsPlaced(rolDetailsAverage.getWardsPlaced()+participant.getWardsPlaced());
+        rolDetailsAverage.setVisionScore(rolDetailsAverage.getVisionScore()+ participant.getVisionScore());
+        rolDetailsAverage.setVisionWardsBoughtInGame(rolDetailsAverage.getVisionWardsBoughtInGame()+ participant.getVisionWardsBoughtInGame());
+        rolDetailsAverage.setWardsKilled(rolDetailsAverage.getWardsKilled()+participant.getWardsKilled());
+        rolDetailsAverage.setEarlyLaningPhaseGoldExpAdvantage(rolDetailsAverage.getEarlyLaningPhaseGoldExpAdvantage()+participant.getChallenges().getEarlyLaningPhaseGoldExpAdvantage());
+        rolDetailsAverage.setEffectiveHealAndShielding(rolDetailsAverage.getEffectiveHealAndShielding()+participant.getChallenges().getEffectiveHealAndShielding());
+        rolDetailsAverage.setGoldPerMinute(rolDetailsAverage.getGoldPerMinute()+participant.getChallenges().getGoldPerMinute());
+        rolDetailsAverage.setJungleCsBefore10Minutes(rolDetailsAverage.getJungleCsBefore10Minutes()+participant.getChallenges().getJungleCsBefore10Minutes());
+        rolDetailsAverage.setLaneMinionsFirst10Minutes(rolDetailsAverage.getLaneMinionsFirst10Minutes()+participant.getChallenges().getLaneMinionsFirst10Minutes());
+        rolDetailsAverage.setLaningPhaseGoldExpAdvantage(rolDetailsAverage.getLaningPhaseGoldExpAdvantage()+participant.getChallenges().getLaningPhaseGoldExpAdvantage());
+        rolDetailsAverage.setMaxCsAdvantageOnLaneOpponent(rolDetailsAverage.getMaxCsAdvantageOnLaneOpponent()+participant.getChallenges().getMaxCsAdvantageOnLaneOpponent());
+        rolDetailsAverage.setVisionScoreAdvantageLaneOpponent(rolDetailsAverage.getVisionScoreAdvantageLaneOpponent()+participant.getChallenges().getVisionScoreAdvantageLaneOpponent());
+        rolDetailsAverage.setMaxLevelLeadLaneOpponent(rolDetailsAverage.getMaxLevelLeadLaneOpponent()+participant.getChallenges().getMaxLevelLeadLaneOpponent());
+        rolDetailsAverage.setSaveAllyFromDeath(rolDetailsAverage.getSaveAllyFromDeath()+participant.getChallenges().getSaveAllyFromDeath());
+        rolDetailsAverage.setKills(rolDetailsAverage.getKills()+participant.getKills());
+        rolDetailsAverage.setKda(rolDetailsAverage.getKda()+participant.getChallenges().getKda());
+        rolDetailsAverage.setKillParticipation(rolDetailsAverage.getKillParticipation()+participant.getChallenges().getKillParticipation());
+        rolDetailsAverage.setDamageDealtToObjectives(rolDetailsAverage.getDamageDealtToObjectives()+participant.getDamageDealtToObjectives());
+        rolDetailsAverage.setGoldEarned(rolDetailsAverage.getGoldEarned()+participant.getGoldEarned());
+        rolDetailsAverage.setLongestTimeSpentLiving(rolDetailsAverage.getLongestTimeSpentLiving()+participant.getLongestTimeSpentLiving());
+        rolDetailsAverage.setMagicDamageDealtToChampions(rolDetailsAverage.getMagicDamageDealtToChampions()+participant.getMagicDamageDealtToChampions());
+        rolDetailsAverage.setMagicDamageTaken(rolDetailsAverage.getMagicDamageTaken()+participant.getMagicDamageTaken());
+        rolDetailsAverage.setPhysicalDamageTaken(rolDetailsAverage.getPhysicalDamageTaken()+participant.getPhysicalDamageTaken());
+        rolDetailsAverage.setPhysicalDamageDealtToChampions(rolDetailsAverage.getPhysicalDamageDealtToChampions()+participant.getPhysicalDamageDealtToChampions());
+        rolDetailsAverage.setDamagePerMinute(rolDetailsAverage.getDamagePerMinute()+participant.getChallenges().getDamagePerMinute());
+        rolDetailsAverage.setDamageTakenOnTeamPercentage(rolDetailsAverage.getDamageTakenOnTeamPercentage()+participant.getChallenges().getDamageTakenOnTeamPercentage());
+        rolDetailsAverage.setTeamDamagePercentage(rolDetailsAverage.getTeamDamagePercentage()+participant.getChallenges().getTeamDamagePercentage());
+        rolDetailsAverage.setTotalDamageDealtToChampions(rolDetailsAverage.getTotalDamageDealtToChampions()+participant.getTotalDamageDealtToChampions());
+        rolDetailsAverage.setTotalDamageShieldedOnTeammates(rolDetailsAverage.getTotalDamageShieldedOnTeammates()+participant.getTotalDamageShieldedOnTeammates());
+        rolDetailsAverage.setTotalDamageTaken(rolDetailsAverage.getTotalDamageTaken()+participant.getTotalDamageTaken());
+        rolDetailsAverage.setTotalHeal(rolDetailsAverage.getTotalHeal()+participant.getTotalHeal());
+        rolDetailsAverage.setTotalHealsOnTeammates(rolDetailsAverage.getTotalHealsOnTeammates()+participant.getTotalHealsOnTeammates());
+        rolDetailsAverage.setTotalTimeSpentDead(rolDetailsAverage.getTotalTimeSpentDead()+participant.getTotalTimeSpentDead());
+        rolDetailsAverage.setTotalUnitsHealed(rolDetailsAverage.getTotalUnitsHealed()+participant.getTotalUnitsHealed());
+        rolDetailsAverage.setRolCount(rolDetailsAverage.getRolCount()+1);
         Champ champdto = new Champ(participant.getChampionName(),participant.getIndividualPosition());
-        if(matchDetailsAverage.getChampTimes().get(champdto) == null){
-            matchDetailsAverage.getChampTimes().put(champdto,1);
+        if(rolDetailsAverage.getChampTimes().get(champdto) == null){
+            rolDetailsAverage.getChampTimes().put(champdto,1);
         } else {
-            matchDetailsAverage.getChampTimes().put(champdto,matchDetailsAverage.getChampTimes().get(champdto)+1);
+            rolDetailsAverage.getChampTimes().put(champdto, rolDetailsAverage.getChampTimes().get(champdto)+1);
         }
-        return matchDetailsAverage;
+        return rolDetailsAverage;
     }
 
-    private static MatchDetailsAverage format(MatchDetailsAverage dto){
+    private static RolDetailsAverage format(RolDetailsAverage dto){
         dto.setTimePlayed(dto.getTimePlayed()/60);
         dto.setGameDuration(dto.getGameDuration()/60);
         return dto;

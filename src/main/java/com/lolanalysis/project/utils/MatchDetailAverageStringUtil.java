@@ -1,10 +1,10 @@
 package com.lolanalysis.project.utils;
 
-import com.lolanalysis.project.models.matchAverage.MatchDetailsAverage;
+import com.lolanalysis.project.models.matchAverage.RolDetailsAverage;
 
 public class MatchDetailAverageStringUtil {
 
-    public String genericToString(MatchDetailsAverage dto){
+    public String genericToString(RolDetailsAverage dto){
         StringBuilder ret = new StringBuilder(startString(dto));
         ret.append(adcToString(dto));
         ret.append(midToString(dto));
@@ -14,27 +14,27 @@ public class MatchDetailAverageStringUtil {
         return ret.toString();
     }
 
-    private static String adcToString(MatchDetailsAverage dto){
+    private static String adcToString(RolDetailsAverage dto){
         return "";
     }
 
-    private static String midToString(MatchDetailsAverage dto){
+    private static String midToString(RolDetailsAverage dto){
         return "";
     }
 
-    private static String topToString(MatchDetailsAverage dto){
+    private static String topToString(RolDetailsAverage dto){
         return "";
     }
 
-    private static String junglToString(MatchDetailsAverage dto){
+    private static String junglToString(RolDetailsAverage dto){
         return "";
     }
-    private static String suppToString(MatchDetailsAverage dto){
+    private static String suppToString(RolDetailsAverage dto){
         return "";
     }
 
 
-    private static String startString(MatchDetailsAverage dto){
+    private static String startString(RolDetailsAverage dto){
         StringBuilder sb = new StringBuilder();
         //Decir cual es su rol principal
         sb.append("A continuación le mostrare un resumen de las ultimas 100 partidas del jugador x");
@@ -43,7 +43,7 @@ public class MatchDetailAverageStringUtil {
         return sb.toString();
     }
 
-    private String visionString(MatchDetailsAverage dto){
+    private String visionString(RolDetailsAverage dto){
         StringBuilder sb = new StringBuilder();
         sb.append("En cuanto a la visión tenemos los siguientes datos por partida: \n");
         sb.append("Stealth wards colocados por partida: "+dto.getStealthWardsPlaced()+"\n");

@@ -12,7 +12,7 @@ import java.util.Map;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MatchDetailsAverage {
+public class RolDetailsAverage {
 
     private double gameDuration;
     private double timePlayed;

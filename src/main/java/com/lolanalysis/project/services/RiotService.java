@@ -2,7 +2,6 @@ package com.lolanalysis.project.services;
 
 import com.lolanalysis.project.clients.RiotApiMatchClient;
 import com.lolanalysis.project.clients.RiotApiUserClient;
-import com.lolanalysis.project.models.matchAverage.MatchDetailsAv;
 import com.lolanalysis.project.models.matchAverage.MatchDetailsAverage;
 import com.lolanalysis.project.models.match.MatchDetails;
 import com.lolanalysis.project.models.match.Participant;
@@ -76,18 +75,18 @@ public class RiotService {
         return matchInfos;
     }
 
-    public MatchDetailsAv getMatchDetailSummary(String name){
+    public MatchDetailsAverage getMatchDetailSummary(String name){
         List<String> matches = getMatches(name,10);
         List<MatchDetails> matchInfos = new ArrayList<>();
         for(String match: matches) {
             matchInfos.add(riotApiMatch.getMatchDetails(match,apiKey));
         }
-        MatchDetailsAv matchDetailsAv = MatchDetailAverageMapper.tomatchDetailsAverage(matchInfos, name);
+        MatchDetailsAverage matchDetailsAverage = MatchDetailAverageMapper.tomatchDetailsAverage(matchInfos, name);
         //toString
         //llamar chatgpt
         //ChatGptResponse response = chatGptService.getCompletion(matchDetailsAverage.toString());
         //System.out.println(matchDetailsAverage.toString());
         //System.out.println(response);
-        return matchDetailsAv;
+        return matchDetailsAverage;
     }
 }

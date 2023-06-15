@@ -1,6 +1,5 @@
 package com.lolanalysis.project.controllers;
 
-import com.lolanalysis.project.models.matchAverage.MatchDetailsAv;
 import com.lolanalysis.project.models.matchAverage.MatchDetailsAverage;
 import com.lolanalysis.project.models.match.MatchDetails;
 import com.lolanalysis.project.models.timeline.MatchTimeline;
@@ -45,7 +44,7 @@ public class RiotController {
     }
 
     @GetMapping("/matchSummary/{name}")
-    public MatchDetailsAv getMatchSummary(@PathVariable String name) {
+    public MatchDetailsAverage getMatchSummary(@PathVariable String name) {
         return riotService.getMatchDetailSummary(name);
     }
 }

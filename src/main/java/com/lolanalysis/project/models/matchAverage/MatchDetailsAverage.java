@@ -9,12 +9,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MatchDetailsAv {
+public class MatchDetailsAverage {
 
-    private MatchDetailsAverage adCarry = new MatchDetailsAverage();
-    private MatchDetailsAverage support = new MatchDetailsAverage();
-    private MatchDetailsAverage top = new MatchDetailsAverage();
-    private MatchDetailsAverage mid = new MatchDetailsAverage();
-    private MatchDetailsAverage jungle = new MatchDetailsAverage();
+    private RolDetailsAverage adCarry = new RolDetailsAverage();
+    private RolDetailsAverage support = new RolDetailsAverage();
+    private RolDetailsAverage top = new RolDetailsAverage();
+    private RolDetailsAverage mid = new RolDetailsAverage();
+    private RolDetailsAverage jungle = new RolDetailsAverage();
 
 }
