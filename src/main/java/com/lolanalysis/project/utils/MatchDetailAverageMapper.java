@@ -55,7 +55,6 @@ public class MatchDetailAverageMapper {
         rolDetailsAverage.setNeutralMinionsKilled(rolDetailsAverage.getNeutralMinionsKilled()+participant.getNeutralMinionsKilled());
         rolDetailsAverage.setJunglMinionsKill(rolDetailsAverage.getJunglMinionsKill()+(participant.getTotalAllyJungleMinionsKilled()+participant.getTotalEnemyJungleMinionsKilled()));
         rolDetailsAverage.setTotalMinionsKilled(rolDetailsAverage.getTotalMinionsKilled()+participant.getTotalMinionsKilled());
-        rolDetailsAverage.setNeutralMinionsKilled(rolDetailsAverage.getNeutralMinionsKilled()+participant.getNeutralMinionsKilled());
         rolDetailsAverage.setMoreEnemyJungleThanOpponent(rolDetailsAverage.getMoreEnemyJungleThanOpponent()+ participant.getChallenges().getMoreEnemyJungleThanOpponent());
         rolDetailsAverage.setQuickFirstTurret(rolDetailsAverage.getQuickFirstTurret()+ participant.getChallenges().getQuickFirstTurret());
         rolDetailsAverage.setQuickSoloKills(rolDetailsAverage.getQuickSoloKills()+ participant.getChallenges().getQuickSoloKills());
@@ -120,6 +119,25 @@ public class MatchDetailAverageMapper {
         dto.setPings(dto.getPings()/dto.getRolCount());
         dto.setFirstBloodOrAssist(((double)dto.getFirstBloodOrAssistCount()/dto.getRolCount())*100);
         dto.setFirstTowerOrAssist(((double)dto.getFirstTowerOrAssistCount()/dto.getRolCount())*100);
+        dto.setTurretKills(dto.getTurretKills()/dto.getRolCount());
+        dto.setDamageDealtToTurrets(dto.getDamageDealtToTurrets()/dto.getRolCount());
+        dto.setTurretPlatesTaken(dto.getTurretPlatesTaken()/dto.getRolCount());
+        dto.setNeutralMinionsKilled(dto.getNeutralMinionsKilled()/dto.getRolCount());
+        dto.setJunglMinionsKill(dto.getJunglMinionsKill()/dto.getRolCount());
+        dto.setMoreEnemyJungleThanOpponent(dto.getMoreEnemyJungleThanOpponent()/dto.getRolCount());
+        dto.setQuickFirstTurret(dto.getQuickFirstTurret()/dto.getRolCount());
+        dto.setQuickSoloKills(dto.getQuickSoloKills()/dto.getRolCount());
+        dto.setBaronKills(dto.getBaronKills()/dto.getRolCount());
+        dto.setDragonKills(dto.getDragonKills()/dto.getRolCount());
+        dto.setTeamElderDragonKills(dto.getTeamElderDragonKills()/dto.getRolCount());
+        dto.setTeamRiftHeraldKills(dto.getTeamRiftHeraldKills()/dto.getRolCount());
+        dto.setVisionScorePerMinute(dto.getVisionScorePerMinute()/dto.getRolCount());
+        dto.setDetectorWardsPlaced(dto.getDetectorWardsPlaced()/dto.getRolCount());
+        dto.setStealthWardsPlaced(dto.getStealthWardsPlaced()/dto.getRolCount());
+        dto.setVisionScore(dto.getVisionScore()/dto.getRolCount());
+        dto.setVisionWardsBoughtInGame(dto.getVisionWardsBoughtInGame()/dto.getRolCount());
+        dto.setWardsKilled(dto.getWardsKilled()/dto.getRolCount());
+        dto.setWardsPlaced(dto.getWardsPlaced()/dto.getRolCount());
         return dto;
     }
 
