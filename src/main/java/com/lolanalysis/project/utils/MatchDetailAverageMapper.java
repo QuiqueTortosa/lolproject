@@ -28,8 +28,12 @@ public class MatchDetailAverageMapper {
                 matchDetailsAverage.setSupport(setFields(matchDetailsAverage.getSupport(), match,participant));
             }
         }
+        format(matchDetailsAverage.getAdCarry());
+        format(matchDetailsAverage.getMid());
+        format(matchDetailsAverage.getSupport());
+        format(matchDetailsAverage.getTop());
+        format(matchDetailsAverage.getJungle());
         return matchDetailsAverage;
-        //return format(matchDetailsAverage);
     }
 
     private static RolDetailsAverage setFields(RolDetailsAverage rolDetailsAverage, MatchDetails match, Participant participant){
@@ -107,8 +111,15 @@ public class MatchDetailAverageMapper {
     }
 
     private static RolDetailsAverage format(RolDetailsAverage dto){
-        dto.setTimePlayed(dto.getTimePlayed()/60);
-        dto.setGameDuration(dto.getGameDuration()/60);
+        if(dto.getRolCount()==0){
+            return dto;
+        }
+        dto.setTimePlayed(dto.getTimePlayed()/dto.getRolCount());
+        dto.setGameDuration(dto.getGameDuration()/dto.getRolCount());
+        dto.setGameEndedInSurrender(((double)dto.getSurrenderCount()/dto.getRolCount())*100);
+        dto.setPings(dto.getPings()/dto.getRolCount());
+        dto.setFirstBloodOrAssist(((double)dto.getFirstBloodOrAssistCount()/dto.getRolCount())*100);
+        dto.setFirstTowerOrAssist(((double)dto.getFirstTowerOrAssistCount()/dto.getRolCount())*100);
         return dto;
     }
 

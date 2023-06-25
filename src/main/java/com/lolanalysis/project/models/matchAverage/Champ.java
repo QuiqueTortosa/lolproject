@@ -28,4 +28,11 @@ public class Champ {
     public int hashCode() {
         return Objects.hash(champ, rol);
     }
+
+    @Override
+    public String toString() {
+        return "Campeon= " + champ +
+                ", Linea= " + rol +
+                " Veces ";
+    }
 }

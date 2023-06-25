@@ -61,7 +61,7 @@ public class RiotService {
     }
 
     public List<MatchDetails> getMatchDetail(String name){
-        List<String> matches = getMatches(name,10);
+        List<String> matches = getMatches(name,3);
         List<MatchDetails> matchInfos = new ArrayList<>();
         for(String match: matches) {
             //Testing
@@ -76,7 +76,7 @@ public class RiotService {
     }
 
     public MatchDetailsAverage getMatchDetailSummary(String name){
-        List<String> matches = getMatches(name,10);
+        List<String> matches = getMatches(name,3);
         List<MatchDetails> matchInfos = new ArrayList<>();
         for(String match: matches) {
             matchInfos.add(riotApiMatch.getMatchDetails(match,apiKey));
